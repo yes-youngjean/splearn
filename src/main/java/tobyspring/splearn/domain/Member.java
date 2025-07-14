@@ -19,10 +19,10 @@ public class Member {
 
     MemberStatus status;
 
-    private Member(String email,
+
+    public Member(String email,
                    String nickname,
                    String passwordHash) {
-        //requireNonNull => Null일 경우 Exception 던짐
         this.email = Objects.requireNonNull(email);
         this.nickname = Objects.requireNonNull(nickname);
         this.passwordHash = Objects.requireNonNull(passwordHash);
@@ -30,22 +30,17 @@ public class Member {
         this.status = PENDING;
     }
 
-    public static Member create(String email,
-                                String nickname,
-                                String password,
-                                PasswordEncoder passwordEncoder) {
-        return new Member(email, nickname, passwordEncoder.encode(password));
-    }
 
     public void activate() {
 //        if(this.status != MemberStatus.PENDING) throw new IllegalStateException("PENDING 상태가 아닙니다.");
-        state(status == PENDING, "PENDING 상태가 아닙니다.");
+        state(this.status == PENDING, "PENDING 상태가 아닙니다.");
 
         this.status = ACTIVE;
     }
 
+
     public void deactivate() {
-        state(status == ACTIVE, "ACTIVE 상태가 아닙니다.");
+        state(this.status == ACTIVE, "ACTIVE 상태가 아닙니다.");
 
         this.status = DEACTIVATED;
     }
