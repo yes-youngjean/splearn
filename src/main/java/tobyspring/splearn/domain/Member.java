@@ -20,7 +20,7 @@ public class Member {
     MemberStatus status;
 
 
-    public Member(String email,
+    private Member(String email,
                    String nickname,
                    String passwordHash) {
         this.email = Objects.requireNonNull(email);
@@ -28,6 +28,12 @@ public class Member {
         this.passwordHash = Objects.requireNonNull(passwordHash);
 
         this.status = PENDING;
+    }
+
+    //Static Factory Method 생성
+    public static Member create(String email, String nickname, String password, PasswordEncoder passwordEncoder) {
+        //PasswordEncoder로 password hash로 만듦
+        return new Member(email, nickname, passwordEncoder.encode(password));
     }
 
 
@@ -43,5 +49,18 @@ public class Member {
         state(this.status == ACTIVE, "ACTIVE 상태가 아닙니다.");
 
         this.status = DEACTIVATED;
+    }
+
+    public boolean verifyPassword(String password,
+                                  PasswordEncoder passwordEncoder) {
+         return passwordEncoder.matches(password, this.passwordHash);
+    }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void changePassword(String password, PasswordEncoder passwordEncoder) {
+        this.passwordHash = passwordEncoder.encode(password);
     }
 }
