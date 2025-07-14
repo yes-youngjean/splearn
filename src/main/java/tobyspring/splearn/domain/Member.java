@@ -5,6 +5,7 @@ import lombok.ToString;
 
 import java.util.Objects;
 
+import static java.util.Objects.*;
 import static org.springframework.util.Assert.state;
 import static tobyspring.splearn.domain.MemberStatus.*;
 
@@ -18,22 +19,23 @@ public class Member {
     String passwordHash;
 
     MemberStatus status;
-
-
-    private Member(String email,
-                   String nickname,
-                   String passwordHash) {
-        this.email = Objects.requireNonNull(email);
-        this.nickname = Objects.requireNonNull(nickname);
-        this.passwordHash = Objects.requireNonNull(passwordHash);
-
-        this.status = PENDING;
+    //외부에서는 사용X, 내부에서만 사용
+    private Member() {
     }
 
     //Static Factory Method 생성
-    public static Member create(String email, String nickname, String password, PasswordEncoder passwordEncoder) {
-        //PasswordEncoder로 password hash로 만듦
-        return new Member(email, nickname, passwordEncoder.encode(password));
+    public static Member create(MemberCreateRequest createRequest,
+                                PasswordEncoder passwordEncoder) {
+        //기본생성자
+        Member member = new Member();
+
+        member.email = requireNonNull(createRequest.email());
+        member.nickname = requireNonNull(createRequest.nickname());
+        member.passwordHash = requireNonNull(passwordEncoder.encode(createRequest.password()));
+
+        member.status = PENDING;
+
+        return member;
     }
 
 
@@ -57,10 +59,14 @@ public class Member {
     }
 
     public void changeNickname(String nickname) {
-        this.nickname = nickname;
+        this.nickname = requireNonNull(nickname);
     }
 
     public void changePassword(String password, PasswordEncoder passwordEncoder) {
-        this.passwordHash = passwordEncoder.encode(password);
+        this.passwordHash = passwordEncoder.encode(requireNonNull(password));
+    }
+
+    public boolean isActive() {
+        return this.status == ACTIVE;
     }
 }
