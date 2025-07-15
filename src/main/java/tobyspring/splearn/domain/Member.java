@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import static java.util.Objects.*;
 import static org.springframework.util.Assert.state;
@@ -12,13 +13,13 @@ import static tobyspring.splearn.domain.MemberStatus.*;
 @Getter
 @ToString
 public class Member {
-    String email;
+    private Email email;
 
-    String nickname;
+    private String nickname;
 
-    String passwordHash;
+    private String passwordHash;
 
-    MemberStatus status;
+    private MemberStatus status;
     //외부에서는 사용X, 내부에서만 사용
     private Member() {
     }
@@ -29,7 +30,7 @@ public class Member {
         //기본생성자
         Member member = new Member();
 
-        member.email = requireNonNull(createRequest.email());
+        member.email = new Email(createRequest.email());
         member.nickname = requireNonNull(createRequest.nickname());
         member.passwordHash = requireNonNull(passwordEncoder.encode(createRequest.password()));
 
