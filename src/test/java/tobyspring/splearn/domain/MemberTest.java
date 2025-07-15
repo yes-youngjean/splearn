@@ -3,8 +3,6 @@ package tobyspring.splearn.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Locale;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MemberTest {
@@ -25,11 +23,11 @@ class MemberTest {
             }
         };
 
-        this.member = Member.create(new MemberCreateRequest("ratee@naver.com", "Ratee", "secret"), passwordEncoder);
+        this.member = Member.register(new MemberRegisterRequest("ratee@naver.com", "Ratee", "secret"), passwordEncoder);
     }
 
     @Test
-    void createMember() {
+    void registerMember() {
 
         assertThat(member.getStatus().equals(MemberStatus.PENDING));
     }
@@ -114,10 +112,10 @@ class MemberTest {
     @Test
     void invalidEmail(){
         assertThatThrownBy(()->
-                Member.create(new MemberCreateRequest("invalid email", "Ratee", "secret"), passwordEncoder)
+                Member.register(new MemberRegisterRequest("invalid email", "Ratee", "secret"), passwordEncoder)
         ).isInstanceOf(IllegalArgumentException.class);
 
-        Member.create(new MemberCreateRequest("222@naver.com", "Ratee", "secret"), passwordEncoder);
+        Member.register(new MemberRegisterRequest("222@naver.com", "Ratee", "secret"), passwordEncoder);
 
     }
 }
