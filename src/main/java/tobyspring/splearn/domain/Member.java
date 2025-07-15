@@ -27,7 +27,7 @@ public class Member {
     //Static Factory Method 생성
     public static Member create(MemberCreateRequest createRequest,
                                 PasswordEncoder passwordEncoder) {
-        //기본생성자
+        //by 기본생성자
         Member member = new Member();
 
         member.email = new Email(createRequest.email());
