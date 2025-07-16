@@ -1,25 +1,33 @@
 package tobyspring.splearn.domain;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static java.util.Objects.*;
 import static org.springframework.util.Assert.state;
 import static tobyspring.splearn.domain.MemberStatus.*;
 
+@Entity
 @Getter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //자동 증가
+    private Long id;
+
+    @Embedded
     private Email email;
 
     private String nickname;
 
     private String passwordHash;
 
+    @Enumerated(EnumType.STRING)
     private MemberStatus status;
-    //외부에서는 사용X, 내부에서만 사용
-    private Member() {
-    }
 
     //Static Factory Method 생성
     public static Member register(MemberRegisterRequest registerRequest,
