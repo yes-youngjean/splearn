@@ -1,5 +1,6 @@
 package tobyspring.splearn.application.required;
 
+import org.springframework.context.annotation.Configuration;
 import tobyspring.splearn.domain.Email;
 
 /**
