@@ -1,5 +1,8 @@
 package tobyspring.splearn.domain;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class MemberFixture {
 
     public static MemberRegisterRequest createMemberRegisterRequest(String email) {
