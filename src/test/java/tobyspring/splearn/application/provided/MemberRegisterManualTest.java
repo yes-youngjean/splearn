@@ -3,7 +3,7 @@ package tobyspring.splearn.application.provided;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
-import tobyspring.splearn.application.MemberService;
+import tobyspring.splearn.application.MemberModifyService;
 import tobyspring.splearn.application.required.EmailSender;
 import tobyspring.splearn.application.required.MemberRepository;
 import tobyspring.splearn.domain.Email;
@@ -24,7 +24,7 @@ class MemberRegisterManualTest {
 
     @Test
     void registerTestStub() {
-        MemberRegister memberRegister = new MemberService(new MemberRepositoryStub(), new EmailSenderStub(), MemberFixture.createPasswordEncoder());
+        MemberRegister memberRegister = new MemberModifyService(new MemberRepositoryStub(), new EmailSenderStub(), MemberFixture.createPasswordEncoder());
 
         Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
 
@@ -37,7 +37,7 @@ class MemberRegisterManualTest {
     void registerTestMock() {
         EmailSenderMock emailSenderMock = new EmailSenderMock();
 
-        MemberRegister memberRegister = new MemberService(new MemberRepositoryStub(), emailSenderMock, MemberFixture.createPasswordEncoder());
+        MemberRegister memberRegister = new MemberModifyService(new MemberRepositoryStub(), emailSenderMock, MemberFixture.createPasswordEncoder());
 
         Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
 
@@ -53,7 +53,7 @@ class MemberRegisterManualTest {
     void registerTestMockito() {
         EmailSender emailSenderMock = Mockito.mock(EmailSender.class);
 
-        MemberRegister memberRegister = new MemberService(new MemberRepositoryStub(), emailSenderMock, MemberFixture.createPasswordEncoder());
+        MemberRegister memberRegister = new MemberModifyService(new MemberRepositoryStub(), emailSenderMock, MemberFixture.createPasswordEncoder());
 
         Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
 
@@ -73,6 +73,11 @@ class MemberRegisterManualTest {
 
         @Override
         public Optional<Member> findByEmail(Email email) {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<Member> findById(Long memberId) {
             return Optional.empty();
         }
     }

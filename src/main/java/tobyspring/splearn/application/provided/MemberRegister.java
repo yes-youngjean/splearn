@@ -11,4 +11,6 @@ public interface MemberRegister {
 
     Member register(@Valid MemberRegisterRequest registerRequest);
 
+    Member active(Long memberId);
+
 }

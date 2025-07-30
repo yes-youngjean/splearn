@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import tobyspring.splearn.application.provided.MemberFinder;
 import tobyspring.splearn.application.provided.MemberRegister;
 import tobyspring.splearn.application.required.EmailSender;
 import tobyspring.splearn.application.required.MemberRepository;
@@ -14,7 +15,7 @@ import tobyspring.splearn.domain.*;
 @Validated
 @Transactional
 @RequiredArgsConstructor
-public class MemberService implements MemberRegister {
+public class MemberModifyService implements MemberRegister{
 
     private final MemberRepository memberRepository;
     private final EmailSender emailSender;
@@ -37,13 +38,27 @@ public class MemberService implements MemberRegister {
         return member;
     }
 
+
     private void sendWelcomeEmail(Member member) {
         emailSender.send(member.getEmail(), "등록을 완료해주세요.", "아래 링크를 클릭해서 등록을 완료해주세요.");
     }
+
 
     private void checkDuplicateEmail(MemberRegisterRequest registerRequest) {
         if (memberRepository.findByEmail(new Email(registerRequest.email())).isPresent()) {
             throw new DuplicateEmailException("이미 사용한 이메일입니다: " + registerRequest.email());
         }
     }
+
+
+    @Override
+    public Member active(Long memberId) {
+
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다. userId = " + memberId));
+
+        member.activate();
+
+        return memberRepository.save(member);
+    }
+
 }
